@@ -1,51 +1,256 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br" ng-app="propostaApp">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Floating Labels Layout com Cleave.js</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lançamento de Proposta</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        main {
+            flex: 1;
+            padding-bottom: 25px;
+            /* Espaço para o footer */
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #f8f9fa;
+            padding: 1rem;
+            text-align: center;
+            border-top: 1px solid #ddd;
+            z-index: 1000;
+        }
+
+        .card {
+            max-height: 90vh;
+            /* Limita a altura do card */
+            overflow-y: auto;
+            /* Ativa barra de rolagem vertical */
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+    </style>
 </head>
-<body>
-  <div class="container mt-4">
-    <div class="row">
-      <div class="col-12">
-        <form>
-          <div class="row g-3">
-            <!-- Campo Valor da Parcela -->
-            <div class="col-7">
-              <div class="form-floating">
-                <input type="text" class="form-control" id="valorParcela" placeholder="Valor da Parcela" inputmode="decimal">
-                <label for="valorParcela">Valor da Parcela</label>
-              </div>
-            </div>
 
-            <!-- Campo Quantidade de Parcelas -->
-            <div class="col-4">
-              <div class="form-floating">
-                <input type="tel" class="form-control" id="quantidadeParcelas" placeholder="Quantidade de Parcelas" inputmode="numeric">
-                <label for="quantidadeParcelas">Qtd. Parcelas</label>
-              </div>
+<body ng-controller="PropostaController">
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-sm-12">
+                <!-- Card -->
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Proposta</h5>
+                        <h6>{{empreendimento.nome}} - Unidade {{empreendimento.unidade}}</h6>
+                        <h6 class="card-subtitle mb-3 text-muted">Valor Tabela: {{empreendimento.valor_tabela |
+                            currency}}</h6>
+                        <!-- Form -->
+                        <form>
+                            <div class="row g-3 ">
+                                <!-- Campo Valor da Parcela -->
+                                <div class="col-12">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control moeda" ng-model="proposta.aVista.valor"
+                                            placeholder="À vista" inputmode="decimal">
+                                        <label>À vista</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row g-3 ">
+                                <!-- Campo Valor da Parcela -->
+                                <div class="col-12">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control moeda" ng-model="proposta.entrada.valor"
+                                            placeholder="Valor da Parcela" inputmode="decimal">
+                                        <label>Entrada</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row g-3 ">
+                                <!-- Campo Valor da Parcela -->
+                                <div class="col-8">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control moeda"
+                                            ng-model="proposta.parcelamento.valor" placeholder="Parcelas"
+                                            inputmode="decimal">
+                                        <label>Parcelamento</label>
+                                    </div>
+                                </div>
+                                <!-- Campo Quantidade de Parcelas -->
+                                <div class="col-4">
+                                    <div class="form-floating">
+                                        <input type="number" class="form-control" ng-model="proposta.parcelamento.qtd"
+                                            placeholder="Quantidade de Parcelas" inputmode="numeric">
+                                        <label>Qtd. Parcela</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row g-3 ">
+                                <!-- Campo Valor da Parcela -->
+                                <div class="col-8">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control moeda"
+                                            ng-model="proposta.financiamento.valor" placeholder="Finaciamento"
+                                            inputmode="decimal">
+                                        <label>Financiamento</label>
+                                    </div>
+                                </div>
+                                <!-- Campo Quantidade de Parcelas -->
+                                <div class="col-4">
+                                    <div class="form-floating">
+                                        <input type="number" class="form-control" ng-model="proposta.financiamento.qtd"
+                                            placeholder="Quantidade de Parcelas" inputmode="numeric">
+                                        <label>Qtd. Parcela</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row g-3 ">
+                                <!-- Campo Valor da Parcela -->
+                                <div class="col-8">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control moeda" ng-model="proposta.reforcos.valor"
+                                            placeholder="Reforços" inputmode="decimal">
+                                        <label>Reforços</label>
+                                    </div>
+                                </div>
+                                <!-- Campo Quantidade de Parcelas -->
+                                <div class="col-4">
+                                    <div class="form-floating">
+                                        <input type="number" class="form-control" ng-model="proposta.reforcos.qtd"
+                                            placeholder="Quantidade de Parcelas" inputmode="numeric">
+                                        <label>Qtd. Parcela</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row g-3 ">
+                                <!-- Campo Valor da Parcela -->
+                                <div class="col-8">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control moeda" ng-model="proposta.permuta.valor"
+                                            placeholder="Permuta" inputmode="decimal">
+                                        <label>Permuta</label>
+                                    </div>
+                                </div>
+                                <!-- Campo Quantidade de Parcelas -->
+                                <div class="col-4">
+                                    <div class="form-floating">
+                                        <input type="number" class="form-control" ng-model="proposta.permuta.qtd"
+                                            placeholder="Quantidade de Parcelas" inputmode="numeric">
+                                        <label>Qtd. Parcela</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control"
+                                            placeholder="Veículo, terreno, apartamento...">
+                                        <label>Específique o objeto da permuta</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-          </div>
-        </form>
-      </div>
+        </div>
     </div>
-  </div>
+    <footer>
+        <h4>Valor total da proposta: <strong><br>{{ calcularTotal() | currency }}</strong> <br><span
+                style="font-size: large;"
+                ng-show="(diferenca < 0 && diferenca != -empreendimento.valor_tabela )">Diferença <span
+                    class="badge text-bg-danger">{{diferenca | currency}}</span></span></h4>
 
-  <!-- Cleave.js -->
-  <script src="https://cdn.jsdelivr.net/npm/cleave.js"></script>
-  <script>
-    // Configuração do campo de valor com Cleave.js
-    new Cleave('#valorParcela', {
-      numeral: true,
-      numeralThousandsGroupStyle: 'thousand',
-      numeralDecimalMark: ',',
-      delimiter: '.',
-      prefix: 'R$ '
-    });
-  </script>
+        <div class="d-grid gap-2">
+            <button class="btn btn-primary" type="button" ng-click="enviaProposta()">Enviar Proposta</button>
+        </div>
+    </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="https://code.angularjs.org/1.8.2/i18n/angular-locale_pt-br.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/cleave.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        // AngularJS Application
+        const app = angular.module('propostaApp', ['ngLocale']);
+
+        app.controller('PropostaController', ['$scope', function ($scope) {
+
+            $scope.empreendimento = {
+                nome: 'Lorenzo Gariel',
+                unidade: '1101',
+                valor_tabela: 732999.55
+            };
+            $scope.proposta = {
+                aVista: { valor: '', qtd: 1 },
+                entrada: { valor: '', qtd: 1 },
+                parcelamento: { valor: '', qtd: 1 },
+                financiamento: { valor: '', qtd: 1 },
+                reforcos: { valor: '', qtd: 1 },
+                permuta: { valor: '', qtd: 1 }
+            };
+            $scope.diferenca = 0;
+
+            // Calcula o valor total
+            $scope.calcularTotal = function () {
+                const parseValor = (valor) => parseFloat(valor.replace(/[^0-9,]/g, '').replace(',', '.')) || 0;
+
+                const aVista = parseValor($scope.proposta.aVista.valor);
+                const entrada = parseValor($scope.proposta.entrada.valor);
+                const parcelamento = parseValor($scope.proposta.parcelamento.valor) * ($scope.proposta.parcelamento.qtd || 0);
+                const financiamento = parseValor($scope.proposta.financiamento.valor) * ($scope.proposta.financiamento.qtd || 0);
+                const reforcos = parseValor($scope.proposta.reforcos.valor) * ($scope.proposta.reforcos.qtd || 0);
+                const permuta = parseValor($scope.proposta.permuta.valor) * ($scope.proposta.permuta.qtd || 0);
+
+                $scope.diferenca = (aVista + entrada + parcelamento + financiamento + reforcos + permuta) - $scope.empreendimento.valor_tabela;
+                return aVista + entrada + parcelamento + financiamento + reforcos + permuta;
+            };
+
+            $scope.enviaProposta = function () {
+                Swal.fire({
+                    icon: "success",
+                    title: "Proposta Enviada",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            }
+
+        }]);
+
+        /***********-- Cleave.js --*************/
+
+        // Seleciona todos os elementos com a classe "moeda"
+        const camposMoeda = document.querySelectorAll('.moeda');
+
+        // Aplica Cleave.js a cada campo encontrado
+        camposMoeda.forEach(campo => {
+            new Cleave(campo, {
+                numeral: true,
+                numeralThousandsGroupStyle: 'thousand',
+                numeralDecimalMark: ',',
+                delimiter: '.',
+                prefix: 'R$ '
+            });
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
+
 </html>
