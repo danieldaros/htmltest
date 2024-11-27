@@ -178,10 +178,10 @@
         </div>
     </main>
     <footer>
-        <h5>Proposta: <strong>{{ calcularTotal() | currency }}</strong>
+        <h6>Proposta: <strong>{{ calcularTotal() | currency }}</strong>
             <span style="font-size: large;" ng-show="(diferenca < 0 && diferenca != -empreendimento.valor_tabela )">
                 <span class="badge text-bg-danger">{{diferenca | currency}}</span></span>
-        </h5>
+        </h6>
 
         <div class="d-grid gap-2">
             <button class="btn btn-primary" type="button" ng-click="enviaProposta()">Enviar Proposta</button>
