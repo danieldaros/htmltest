@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br" ng-app="propostaApp">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,7 +32,7 @@
         }
 
         .card {
-            max-height: 90vh;
+            max-height: 80vh;
             /* Limita a altura do card */
             overflow-y: auto;
             /* Ativa barra de rolagem vertical */
@@ -49,11 +50,12 @@
             <div class="col-md-8 col-sm-12">
                 <!-- Card -->
                 <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Proposta</h5>
-                        <h6>{{empreendimento.nome}} - Unidade {{empreendimento.unidade}}</h6>
-                        <h6 class="card-subtitle mb-3 text-muted">Valor Tabela: {{empreendimento.valor_tabela |
+                    <div class="card-header">
+                        <h4>Proposta - <span style="font-size: large;">{{empreendimento.nome}} - Unidade {{empreendimento.unidade}}</span></h4>
+                        <h6 class="card-subtitle text-muted">Valor Tabela: {{empreendimento.valor_tabela |
                             currency}}</h6>
+                      </div>
+                    <div class="card-body">
                         <!-- Form -->
                         <form>
                             <div class="row g-3 ">
@@ -169,9 +171,9 @@
         </div>
     </div>
     <footer>
-        <h4>Valor total da proposta: <strong><br>{{ calcularTotal() | currency }}</strong> <br><span
+        <h4>Proposta: <strong>{{ calcularTotal() | currency }}</strong><span
                 style="font-size: large;"
-                ng-show="(diferenca < 0 && diferenca != -empreendimento.valor_tabela )">Diferença <span
+                ng-show="(diferenca < 0 && diferenca != -empreendimento.valor_tabela )">  <span
                     class="badge text-bg-danger">{{diferenca | currency}}</span></span></h4>
 
         <div class="d-grid gap-2">
