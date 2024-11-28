@@ -99,14 +99,14 @@
     </div>
 
     <div class="d-flex d-flex justify-content-center gap-3 pt-3 pb-3">
-          <button type="button" class="btn btn-success btn-lg d-flex flex-column align-items-center">
+        <button type="button" ng-click="aceitar()" class="btn btn-success btn-lg d-flex flex-column align-items-center">
             <i class="bi bi-check-circle mb-2" style="font-size: 2rem;"></i>
             Aprovar
-          </button>
-          <button type="button" class="btn btn-danger btn-lg d-flex flex-column align-items-center">
+        </button>
+        <button type="button" ng-click="reprovar()" class="btn btn-danger btn-lg d-flex flex-column align-items-center">
             <i class="bi bi-dash-circle mb-2" style="font-size: 2rem;"></i>
             Reprovar
-          </button>
+        </button>
     </div>
 
     <!-- Negociação -->
@@ -213,13 +213,41 @@
 
             $scope.empreendimento.vl_ate_chaves = calcularValoresRecebidos($scope.empreendimento, proposta);
 
-            $scope.enviaProposta = function () {
+            $scope.aceitar = function () {
                 Swal.fire({
                     icon: "success",
-                    title: "Proposta Enviada",
+                    title: "Proposta Aprovada!",
+                    text: "Enviada ao gerente comercial!",
                     showConfirmButton: false,
-                    timer: 1500
+                    timer: 2000
                 });
+            }
+
+            $scope.reprovar = function () {
+                Swal.fire({
+                    title: "Motivo da reprovação:",
+                    icon: "error",
+                    html: `
+                            <div class="form-floating mb-3">
+                            <textarea class="form-control" placeholder="Motivo da Reprovação" id="floatingTextarea" style="height: 150px;"></textarea>
+                            <label for="floatingTextarea">Motivo da Reprovação</label>
+                            </div>
+                        `,
+                    showConfirmButton: false,
+                    showDenyButton: true,
+                    showCancelButton: true,
+                    focusConfirm: false,
+                    denyButtonText: `Reprovar`,
+                    cancelButtonText: `Cancelar`
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    console.log("REPOSVADO", result)
+                    if (result.isDenied) {
+                        Swal.fire("Proposta Reprovada", "Informaremos o gerente comercial", "info");
+                    }
+                });
+
+
             }
 
         }]);
