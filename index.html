@@ -65,24 +65,30 @@
                     <div class="card">
                         <div class="card-header">
                             <h4>{{empreendimento.nome}} - Unidade {{empreendimento.unidade}}</h4>
-                            <h6 class="card-subtitle text-muted">Valor Tabela: {{empreendimento.valor_tabela |
-                                currency}}</h6>
+                            <h6 class="card-subtitle text-muted pb-1">Valor Tabela: {{empreendimento.valor_tabela | currency}}</h6>
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="mb-0 text-muted">Início: <span class="badge text-bg-secondary">NOVEMBRO 2025</span></h6>
+                                </div>
+                                <h6 class="mb-0 text-muted">Entrega: <span class="badge text-bg-success">NOVEMBRO 2029</span></h6>
+                                
+                            </div>
                         </div>
                         <div class="card-body">
                             <!-- Form -->
                             <form>
-                                 <div class="row g-3 ">
+                                <div class="row g-3 ">
                                     <!-- Campo Valor da Parcela -->
                                     <div class="col-12">
                                         <div class="form-floating">
                                             <input type="text" class="form-control moeda"
                                                 ng-model="proposta.aVista.valor" placeholder="À vista"
                                                 inputmode="decimal">
-                                            <label>À vista</label>
+                                            <label>Valor À vista</label>
                                         </div>
                                     </div>
                                 </div>
-                                <hr> 
+                                <hr>
                                 <div class="row g-3 ">
                                     <!-- Campo Valor da Parcela -->
                                     <div class="col-12">
@@ -90,7 +96,7 @@
                                             <input type="text" class="form-control moeda"
                                                 ng-model="proposta.entrada.valor" placeholder="Valor da Parcela"
                                                 inputmode="decimal">
-                                            <label>Entrada</label>
+                                            <label>Valor Entrada</label>
                                         </div>
                                     </div>
                                 </div>
@@ -102,7 +108,7 @@
                                             <input type="text" class="form-control moeda"
                                                 ng-model="proposta.parcelamento.valor" placeholder="Parcelas"
                                                 inputmode="decimal">
-                                            <label>Parcelamento</label>
+                                            <label>Valor Parcelamento</label>
                                         </div>
                                     </div>
                                     <!-- Campo Quantidade de Parcelas -->
@@ -121,30 +127,9 @@
                                     <div class="col-8">
                                         <div class="form-floating">
                                             <input type="text" class="form-control moeda"
-                                                ng-model="proposta.financiamento.valor" placeholder="Finaciamento"
-                                                inputmode="decimal">
-                                            <label>Financiamento</label>
-                                        </div>
-                                    </div>
-                                    <!-- Campo Quantidade de Parcelas -->
-                                    <div class="col-4">
-                                        <div class="form-floating">
-                                            <input type="number" class="form-control"
-                                                ng-model="proposta.financiamento.qtd"
-                                                placeholder="Quantidade de Parcelas" inputmode="numeric">
-                                            <label>Qtd. Parcela</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <hr>
-                                <div class="row g-3 ">
-                                    <!-- Campo Valor da Parcela -->
-                                    <div class="col-8">
-                                        <div class="form-floating">
-                                            <input type="text" class="form-control moeda"
                                                 ng-model="proposta.reforcos.valor" placeholder="Reforços"
                                                 inputmode="decimal">
-                                            <label>Reforços</label>
+                                            <label>Valor Reforços</label>
                                         </div>
                                     </div>
                                     <!-- Campo Quantidade de Parcelas -->
@@ -164,7 +149,7 @@
                                             <input type="text" class="form-control moeda"
                                                 ng-model="proposta.permuta.valor" placeholder="Permuta"
                                                 inputmode="decimal">
-                                            <label>Permuta</label>
+                                            <label>Valor Permuta</label>
                                         </div>
                                     </div>
                                     <!-- Campo Quantidade de Parcelas -->
