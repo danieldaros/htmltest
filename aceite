@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt-BR" ng-app="aceiteApp">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Similar</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .card-custom {
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .negociacao {
+            background-color: #ff6b6b;
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body class="bg-light" ng-controller="AceiteController">
+
+
+    <div class="container mt-3">
+        <!-- Card Principal -->
+        <div class="card card-custom p-3 position-relative">
+            <h5>{{empreendimento.nome}}</h5>
+            <div class="d-flex justify-content-between">
+                <p class="mb-0"> Unidade {{empreendimento.unidade}} </p>
+                <p class="mb-0 text-right"> Entrega <span
+                        class="badge text-bg-primary">{{empreendimento.data_entrega_formatada}}</span></p>
+            </div>
+
+            <hr>
+            <p class="mb-0">Valor de tabela</p>
+            <h4>{{empreendimento.valor_tabela|currency}}</h4>
+
+            <hr>
+            <p class="mb-0">Valor da Proposta</p>
+            <h4>{{calcularTotal | currency}}</h4>
+            <hr>
+            <p class="mb-0">Diferença</p>
+            <div class="d-flex justify-content-between">
+                <div>
+                    <h4 class="text-danger">{{diferenca | currency}}</h4>
+                </div>
+                <p class="mb-0 text-danger">{{diferencaPerc}} %</p>
+            </div>
+
+
+        </div>
+        <!-- Fluxo de Pagamento -->
+        <div class="card card-custom mt-3 p-3">
+            <h6>Fluxo de Pagamento</h6>
+            <div class="d-flex justify-content-between">
+                <div>
+                    <p class="mb-0">Entrada</p>
+                    <p class="text-muted mb-0">1x R$150.000,00</p>
+                </div>
+                <p class="mb-0 text-muted">26.32%</p>
+            </div>
+            <div class="d-flex justify-content-between mt-2">
+                <div>
+                    <p class="mb-0">Parcelas</p>
+                    <p class="text-muted mb-0">90x R$3500,00</p>
+                </div>
+                <p class="mb-0 text-muted">55.26%</p>
+            </div>
+            <div class="d-flex justify-content-between mt-2">
+                <div>
+                    <p class="mb-0">Reforços</p>
+                    <p class="text-muted mb-0">8x R$30.000,00</p>
+                </div>
+                <p class="mb-0 text-muted">42.11%</p>
+            </div>
+            <hr>
+            <h6>Recebimento até as chaves</h6>
+            <div class="d-flex justify-content-between">
+                <div>
+                    <h4 class="text-primary">{{empreendimento.vl_ate_chaves.total_recebido | currency}}</h4>
+                </div>
+                <p class="mb-0 text-primary">{{empreendimento.vl_ate_chaves.percentual_recebido}}</p>
+            </div>
+
+        </div>
+
+        <!-- Corretor -->
+        <div class="card card-custom mt-3 p-3">
+            <h6>Corretor</h6>
+            <p class="mb-0">João da Silva <br> Imobiliária: Tesouro Celeste</p>
+        </div>
+    </div>
+    </div>
+
+    <div class="d-flex d-flex justify-content-center gap-3 pt-3 pb-3">
+          <button type="button" class="btn btn-success btn-lg d-flex flex-column align-items-center">
+            <i class="bi bi-check-circle mb-2" style="font-size: 2rem;"></i>
+            Aprovar
+          </button>
+          <button type="button" class="btn btn-danger btn-lg d-flex flex-column align-items-center">
+            <i class="bi bi-dash-circle mb-2" style="font-size: 2rem;"></i>
+            Reprovar
+          </button>
+    </div>
+
+    <!-- Negociação -->
+    <!-- <div class="negociacao mt-3">
+        <h6 class="mb-2">Negociação</h6>
+        <p class="mb-0">Condições comerciais propostas não aceitas</p>
+        <p class="mb-0">Pode passar uma contra de 830.000, estes 30 podem ser inseridos nas parcelas e/ou reforços.
+        </p>
+        <small>Por Chirley em 21/08/2024 07:42:57 | há 3 meses</small>
+    </div> -->
+
+
+
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="https://code.angularjs.org/1.8.2/i18n/angular-locale_pt-br.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/cleave.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        // AngularJS Application
+        const app = angular.module('aceiteApp', ['ngLocale']);
+
+        app.controller('AceiteController', ['$scope', function ($scope) {
+
+            $scope.empreendimento = {
+                nome: 'Lorenzo Gabriel',
+                unidade: '1101',
+                valor_tabela: 732999.55,
+                data_entrega: '2029-11-01',
+                data_entrega_formatada: 'NOVEMBRO 2029',
+                vl_ate_chaves: {}
+            };
+
+            $scope.diferenca = 0;
+
+            // Calcula o valor total
+            var proposta = {
+                aVista: { valor: 0, qtd: 1 },
+                entrada: { valor: 150000, qtd: 1 },
+                parcelamento: { valor: 3500, qtd: 90 },
+                financiamento: { valor: 0, qtd: 1 },
+                reforcos: { valor: 30000, qtd: 8 },
+                permuta: { valor: 0, qtd: 1 }
+            };
+            calcularTotal = function () {
+
+                const aVista = proposta.aVista.valor;
+                const entrada = proposta.entrada.valor;
+                const parcelamento = proposta.parcelamento.valor * proposta.parcelamento.qtd || 0;
+                const financiamento = proposta.financiamento.valor * proposta.financiamento.qtd || 0;
+                const reforcos = proposta.reforcos.valor * proposta.reforcos.qtd || 0;
+                const permuta = proposta.permuta.valor * proposta.permuta.qtd || 0;
+
+                $scope.diferenca = (aVista + entrada + parcelamento + financiamento + reforcos + permuta) - $scope.empreendimento.valor_tabela;
+                $scope.diferencaPerc = ((((aVista + entrada + parcelamento + financiamento + reforcos + permuta) * 100) / $scope.empreendimento.valor_tabela) - 100).toFixed(2);
+
+                console.log("TSTE", (aVista + entrada + parcelamento + financiamento + reforcos + permuta))
+                return aVista + entrada + parcelamento + financiamento + reforcos + permuta;
+            };
+
+
+            $scope.calcularTotal = calcularTotal();
+
+            function calcularValoresRecebidos(empreendimento, proposta) {
+                const hoje = new Date();
+                const dataEntrega = new Date(empreendimento.data_entrega);
+
+                // Diferença em meses e anos entre hoje e a data de entrega
+                const diffMeses =
+                    (dataEntrega.getFullYear() - hoje.getFullYear()) * 12 +
+                    (dataEntrega.getMonth() - hoje.getMonth());
+                const diffAnos = Math.floor(diffMeses / 12);
+
+                let totalRecebido = 0;
+
+                // Itera sobre as chaves do JSON e realiza o cálculo
+                for (const chave in proposta) {
+                    const { valor, qtd } = proposta[chave];
+
+                    if (chave === "reforcos") {
+                        // Reforços são anuais, calcular com base na diferença em anos
+                        const reforcosRecebidos = Math.min(diffAnos, qtd);
+                        totalRecebido += reforcosRecebidos * valor;
+                    } else {
+                        // Demais pagamentos são mensais
+                        const recebidos = Math.min(diffMeses, qtd);
+                        totalRecebido += recebidos * valor;
+                    }
+                }
+
+                // Calcula o percentual recebido
+                const percentualRecebido = (totalRecebido / empreendimento.valor_tabela) * 100;
+
+                return {
+                    total_recebido: totalRecebido,
+                    percentual_recebido: percentualRecebido.toFixed(2) + "%"
+                };
+            }
+
+            $scope.empreendimento.vl_ate_chaves = calcularValoresRecebidos($scope.empreendimento, proposta);
+
+            $scope.enviaProposta = function () {
+                Swal.fire({
+                    icon: "success",
+                    title: "Proposta Enviada",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            }
+
+        }]);
+    </script>
+</body>
+
+</html>
